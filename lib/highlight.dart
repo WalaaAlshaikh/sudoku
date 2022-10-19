@@ -1,4 +1,4 @@
-class Focus {
+class HighLights {
   int? indexBox;
   int? indexChar;
 

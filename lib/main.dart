@@ -1,7 +1,10 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:sudoku/block_checker.dart';
 import 'package:sudoku/box_checker.dart';
 import 'highlight.dart';
+import 'package:quiver/iterables.dart';
 import 'package:sudoku_solver_generator/sudoku_solver_generator.dart';
 
 void main() {
@@ -55,7 +58,7 @@ class _MyHomePageState extends State<MyHomePage> {
     isfinish = false;
     highLight = new HighLights();
     tapbox = null;
-    //generatepuzzle();
+    generatepuzzle();
     //checkfinish(){};
     //setState((){});
   }
@@ -81,7 +84,7 @@ class _MyHomePageState extends State<MyHomePage> {
               width: double.maxFinite,
               alignment: Alignment.center,
               child: GridView.builder(
-                itemCount: 9,
+                itemCount: alist.length,
                 shrinkWrap: true,
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 3,
@@ -90,11 +93,12 @@ class _MyHomePageState extends State<MyHomePage> {
                   mainAxisSpacing: 5,
                 ),
                 itemBuilder: (BuildContext context, int index) {
+                  BlockChecker block = alist[index];
                   return Container(
                       color: Colors.white,
                       alignment: Alignment.center,
                       child: GridView.builder(
-                        itemCount: 9,
+                        itemCount: block.blokChars.length,
                         shrinkWrap: true,
                         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                           crossAxisCount: 3,
@@ -103,6 +107,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           mainAxisSpacing: 2,
                         ),
                         itemBuilder: (BuildContext context, int index) {
+                          BoxChecker box = block.blokChars[index];
                           return Container(
                               margin: EdgeInsets.all(3),
                               color: Colors.grey.shade300,
@@ -175,5 +180,27 @@ class _MyHomePageState extends State<MyHomePage> {
 
       // This trailing comma makes auto-formatting nicer for build methods.
     );
+  }
+
+  generatepuzzle() {
+    alist.clear();
+    var sudokugenerator = SudokuGenerator(emptySquares: 3);
+    List<List<List<int>>> completes = partition(sudokugenerator.newSudokuSolved,
+            sqrt(sudokugenerator.newSudoku.length).toInt())
+        .toList();
+    partition(sudokugenerator.newSudoku,
+            sqrt(sudokugenerator.newSudoku.length).toInt())
+        .toList()
+        .asMap()
+        .entries
+        .forEach((entry) {
+      List<int> templistcomplete =
+          completes[entry.key].expand((element) => element).toList();
+      List<int> templist = entry.value.expand((element) => element).toList();
+      templist.asMap().entries.forEach((entryin) {
+        int index = entry.key * sqrt(sudokugenerator.newSudoku.length).toInt() +
+            (entryin.key % 9).toInt() ~/ 3;
+      });
+    });
   }
 }
