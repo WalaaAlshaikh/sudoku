@@ -50,22 +50,49 @@ class _MyHomePageState extends State<MyHomePage> {
 
         title: Text(widget.title),
       ),
-      body: Container (
+      body: SafeArea(child:
+      Container (
         alignment: Alignment.center,
         child: Column(
+
           children: [
             Expanded(
-              child:
-              GridView.count(
-                  crossAxisCount: 9,
-                  children: List.generate(81, (index) {
-                    return Center(
-                      child: Text('this is '),
-                    );
-                  })
-              ),
+              child:Container(
+                decoration: BoxDecoration(
+                  color: Colors.grey
+                ),
+            child:   GridView.builder(
+        itemCount: 9,
+        shrinkWrap: true,
+        scrollDirection: Axis.vertical,
+        gridDelegate:
+        SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 3,
+          childAspectRatio: 1,
+          crossAxisSpacing: 5,
+          mainAxisSpacing: 5,
+        ),
+        physics: ScrollPhysics(),
+        itemBuilder: (buildContext, index) {
+          return ElevatedButton(
+            onPressed: () {},
+            child: Text(
+              "${index + 1}",
+              style: TextStyle(color: Colors.black),
             ),
-            Row(
+            style: ButtonStyle(
+              backgroundColor:
+              MaterialStateProperty.all<Color>(
+                  Colors.white),
+            ),
+          );
+        },
+      ),
+              ),
+
+              ),
+
+            Row(mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 ElevatedButton(onPressed: (){}, child: Text('Enter'))
               ],
@@ -74,7 +101,7 @@ class _MyHomePageState extends State<MyHomePage> {
           ],
 
         ),
-      )
+      ) ),
 
 
 
