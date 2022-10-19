@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:sudoku/block_checker.dart';
+import 'package:sudoku/box_checker.dart';
+import 'highlight.dart';
+import 'package:sudoku_solver_generator/sudoku_solver_generator.dart';
 
 void main() {
   runApp(const MyApp());
@@ -38,6 +42,24 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  List<BlockChecker> alist = [];
+  HighLights highLight = HighLights();
+  bool isfinish = false;
+  String? tapbox;
+  @override
+  void initState() {
+    generateSudoku();
+  }
+
+  void generateSudoku() {
+    isfinish = false;
+    highLight = new HighLights();
+    tapbox = null;
+    //generatepuzzle();
+    //checkfinish(){};
+    //setState((){});
+  }
+
   final snack = SnackBar(content: Text("Just to test inkwell"));
   @override
   Widget build(BuildContext context) {
@@ -139,7 +161,8 @@ class _MyHomePageState extends State<MyHomePage> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                ElevatedButton(onPressed: () {}, child: Text('Enter')),
+                ElevatedButton(
+                    onPressed: () => generateSudoku(), child: Text('Reset')),
                 ElevatedButton(
                   onPressed: null,
                   child: Text('Check Answer'),
