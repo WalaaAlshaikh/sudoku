@@ -38,67 +38,74 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  final snack=SnackBar(content: Text("Just to test inkwell"));
+  final snack = SnackBar(content: Text("Just to test inkwell"));
   @override
   Widget build(BuildContext context) {
+    final thecontroller = TextEditingController();
     return Scaffold(
-
       appBar: AppBar(
         title: Text(widget.title),
       ),
       body: SafeArea(
           child: Container(
-
         alignment: Alignment.center,
         child: Column(
           children: [
             Container(
-        margin: EdgeInsets.all(20),
-            // height: 400,
-            color: Colors.grey,
-            padding: EdgeInsets.all(5),
-            width: double.maxFinite,
-            alignment: Alignment.center,
-            child: GridView.builder(
-              itemCount: 9,
-              shrinkWrap: true,
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 3,
-                childAspectRatio: 1,
-                crossAxisSpacing: 5,
-                mainAxisSpacing: 5,
-              ), itemBuilder: (BuildContext context, int index) {
-              return Container(
-                  color: Colors.white,
-                  alignment: Alignment.center,
-                  child: GridView.builder(
-                  itemCount: 9,
-                  shrinkWrap: true,
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              margin: EdgeInsets.all(20),
+              // height: 400,
+              color: Colors.grey,
+              padding: EdgeInsets.all(5),
+              width: double.maxFinite,
+              alignment: Alignment.center,
+              child: GridView.builder(
+                itemCount: 9,
+                shrinkWrap: true,
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 3,
                   childAspectRatio: 1,
-                  crossAxisSpacing: 2,
-                  mainAxisSpacing: 2,
-              ), itemBuilder: (BuildContext context, int index) {
-
-                    return Container(
-                        margin: EdgeInsets.all(3),
-                        color: Colors.grey.shade300,
-                        alignment: Alignment.center,
-                        child: InkWell(onTap:(){
-
-                      ScaffoldMessenger.of(context).showSnackBar(snack);
-                    },
-                          child: Container(child: TextField(),),
-
-
-                    ));
-                  },
-              ));
-            },
-
-            ),)
-,
+                  crossAxisSpacing: 5,
+                  mainAxisSpacing: 5,
+                ),
+                itemBuilder: (BuildContext context, int index) {
+                  return Container(
+                      color: Colors.white,
+                      alignment: Alignment.center,
+                      child: GridView.builder(
+                        itemCount: 9,
+                        shrinkWrap: true,
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 3,
+                          childAspectRatio: 1,
+                          crossAxisSpacing: 2,
+                          mainAxisSpacing: 2,
+                        ),
+                        itemBuilder: (BuildContext context, int index) {
+                          return Container(
+                              margin: EdgeInsets.all(3),
+                              color: Colors.grey.shade300,
+                              alignment: Alignment.center,
+                              child: InkWell(
+                                onTap: () {
+                                  ScaffoldMessenger.of(context)
+                                      .showSnackBar(snack);
+                                },
+                                child: Container(
+                                  child: TextField(
+                                    textAlign: TextAlign.center,
+                                    controller: thecontroller,
+                                    //enabled: false,
+                                    decoration: InputDecoration(
+                                      labelText: thecontroller.text,
+                                    ),
+                                  ),
+                                ),
+                              ));
+                        },
+                      ));
+                },
+              ),
+            ),
             // Expanded(
             //   child: Container(
             //     decoration: BoxDecoration(color: Colors.grey),
