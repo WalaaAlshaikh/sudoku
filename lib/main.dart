@@ -11,13 +11,11 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-
-        primarySwatch: Colors.blue,
-      ),
-      home:  MyHomePage(title: 'Sudoko')
-    );
+        title: 'Flutter Demo',
+        theme: ThemeData(
+          primarySwatch: Colors.blue,
+        ),
+        home: MyHomePage(title: 'Sudoko'));
   }
 }
 
@@ -40,74 +38,112 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-
-
+  final snack=SnackBar(content: Text("Just to test inkwell"));
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
-      appBar: AppBar(
 
+      appBar: AppBar(
         title: Text(widget.title),
       ),
-      body: SafeArea(child:
-      Container (
+      body: SafeArea(
+          child: Container(
+
         alignment: Alignment.center,
         child: Column(
-
           children: [
-            Expanded(
-              child:Container(
-                decoration: BoxDecoration(
-                  color: Colors.grey
-                ),
-            child:   GridView.builder(
-        itemCount: 9,
-        shrinkWrap: true,
-        scrollDirection: Axis.vertical,
-        gridDelegate:
-        SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 3,
-          childAspectRatio: 1,
-          crossAxisSpacing: 5,
-          mainAxisSpacing: 5,
-        ),
-        physics: ScrollPhysics(),
-        itemBuilder: (buildContext, index) {
-          return ElevatedButton(
-            onPressed: () {},
-            child: Text(
-              "${index + 1}",
-              style: TextStyle(color: Colors.black),
-            ),
-            style: ButtonStyle(
-              backgroundColor:
-              MaterialStateProperty.all<Color>(
-                  Colors.white),
-            ),
-          );
-        },
-      ),
-              ),
+            Container(
+        margin: EdgeInsets.all(20),
+            // height: 400,
+            color: Colors.grey,
+            padding: EdgeInsets.all(5),
+            width: double.maxFinite,
+            alignment: Alignment.center,
+            child: GridView.builder(
+              itemCount: 9,
+              shrinkWrap: true,
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 3,
+                childAspectRatio: 1,
+                crossAxisSpacing: 5,
+                mainAxisSpacing: 5,
+              ), itemBuilder: (BuildContext context, int index) {
+              return Container(
+                  color: Colors.white,
+                  alignment: Alignment.center,
+                  child: GridView.builder(
+                  itemCount: 9,
+                  shrinkWrap: true,
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 3,
+                  childAspectRatio: 1,
+                  crossAxisSpacing: 2,
+                  mainAxisSpacing: 2,
+              ), itemBuilder: (BuildContext context, int index) {
 
-              ),
+                    return Container(
+                        margin: EdgeInsets.all(3),
+                        color: Colors.grey.shade300,
+                        alignment: Alignment.center,
+                        child: InkWell(onTap:(){
 
-            Row(mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      ScaffoldMessenger.of(context).showSnackBar(snack);
+                    },
+                          child: Container(child: TextField(),),
+
+
+                    ));
+                  },
+              ));
+            },
+
+            ),)
+,
+            // Expanded(
+            //   child: Container(
+            //     decoration: BoxDecoration(color: Colors.grey),
+            //     child: GridView.builder(
+            //       itemCount: 9,
+            //       shrinkWrap: true,
+            //       scrollDirection: Axis.vertical,
+            //       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            //         crossAxisCount: 3,
+            //         childAspectRatio: 1,
+            //         crossAxisSpacing: 5,
+            //         mainAxisSpacing: 5,
+            //       ),
+            //       physics: ScrollPhysics(),
+            //       itemBuilder: (buildContext, index) {
+            //         return ElevatedButton(
+            //           onPressed: () {},
+            //           child: Text(
+            //             "${index + 1}",
+            //             style: TextStyle(color: Colors.black),
+            //           ),
+            //           style: ButtonStyle(
+            //             backgroundColor:
+            //                 MaterialStateProperty.all<Color>(Colors.white),
+            //           ),
+            //         );
+            //       },
+            //     ),
+            //   ),
+            // ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                ElevatedButton(onPressed: (){}, child: Text('Enter'))
+                ElevatedButton(onPressed: () {}, child: Text('Enter')),
+                ElevatedButton(
+                  onPressed: null,
+                  child: Text('Check Answer'),
+                )
               ],
             ),
-
           ],
-
         ),
-      ) ),
+      )),
 
-
-
-
-           // This trailing comma makes auto-formatting nicer for build methods.
+      // This trailing comma makes auto-formatting nicer for build methods.
     );
-
   }
 }
