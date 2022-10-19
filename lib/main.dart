@@ -51,16 +51,26 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Text(widget.title),
       ),
       body: Container (
+        alignment: Alignment.center,
         child: Column(
           children: [
-            GridView.count(
-                crossAxisCount: 9,
-                children: List.generate(81, (index) {
-                  return Center(
-                    child: Text('this is '),
-                  );
-                })
+            Expanded(
+              child:
+              GridView.count(
+                  crossAxisCount: 9,
+                  children: List.generate(81, (index) {
+                    return Center(
+                      child: Text('this is '),
+                    );
+                  })
+              ),
             ),
+            Row(
+              children: [
+                ElevatedButton(onPressed: (){}, child: Text('Enter'))
+              ],
+            ),
+
           ],
 
         ),
