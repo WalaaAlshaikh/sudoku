@@ -50,8 +50,9 @@ class _MyHomePageState extends State<MyHomePage> {
 
         title: Text(widget.title),
       ),
-      body:
-          Center(child: Column(children: [
+      body: Container (
+        child: Column(
+          children: [
             GridView.count(
                 crossAxisCount: 9,
                 children: List.generate(81, (index) {
@@ -61,8 +62,9 @@ class _MyHomePageState extends State<MyHomePage> {
                 })
             ),
           ],
-          ),),
 
+        ),
+      )
 
 
 
