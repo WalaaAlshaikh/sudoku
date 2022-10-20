@@ -1,16 +1,41 @@
 # sudoku
 
-A new Flutter project.
 
-## Getting Started
+## Default screen
 
-This project is a starting point for a Flutter application.
+<img src="https://github.com/WalaaAlshaikh/sudoku/blob/f34dd19f7cd5c4d7471381092a42a7d95e046335/images/Screen%20Shot%201444-03-24%20at%202.16.59%20PM.png"  height="380">
 
-A few resources to get you started if this is your first Flutter project:
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## column/row indicators
+
+<img src="https://github.com/WalaaAlshaikh/sudoku/blob/f34dd19f7cd5c4d7471381092a42a7d95e046335/images/Screen%20Shot%201444-03-24%20at%202.26.15%20PM.png"  height="380">
+
+
+
+## correct answers
+
+<img src="https://github.com/WalaaAlshaikh/sudoku/blob/f34dd19f7cd5c4d7471381092a42a7d95e046335/images/Screen%20Shot%201444-03-24%20at%202.27.02%20PM.png"  height="380">
+
+
+## checking wrong answer
+
+
+<img src="https://github.com/WalaaAlshaikh/sudoku/blob/f34dd19f7cd5c4d7471381092a42a7d95e046335/images/Screen%20Shot%201444-03-24%20at%202.24.51%20PM.png"  height="380">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
