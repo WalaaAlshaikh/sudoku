@@ -29,15 +29,6 @@ class MyApp extends StatelessWidget {
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title});
 
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
   final String title;
 
   @override
@@ -49,18 +40,22 @@ class _MyHomePageState extends State<MyHomePage> {
   HighLights highLight = HighLights();
   bool isfinish = false;
   String? tapbox;
+
   @override
   void initState() {
     generateSudoku();
+    super.initState();
+
   }
 
   void generateSudoku() {
     isfinish = false;
-    highLight = new HighLights();
+    highLight = HighLights();
     tapbox = null;
     generatepuzzle();
-    //checkfinish(){};
-    //setState((){});
+    checkfinish();
+    setState((){});
+    print(alist);
   }
 
   final snack = SnackBar(content: Text("Just to test inkwell"));
@@ -69,6 +64,10 @@ class _MyHomePageState extends State<MyHomePage> {
     final thecontroller = TextEditingController();
     return Scaffold(
       appBar: AppBar(
+        actions: [
+          ElevatedButton(
+              onPressed: () => generateSudoku(), child: Icon(Icons.refresh)),
+        ],
         title: Text(widget.title),
       ),
       body: SafeArea(
@@ -79,7 +78,7 @@ class _MyHomePageState extends State<MyHomePage> {
             Container(
               margin: EdgeInsets.all(20),
               // height: 400,
-              color: Colors.grey,
+              color: Colors.black38,
               padding: EdgeInsets.all(5),
               width: double.maxFinite,
               alignment: Alignment.center,
@@ -92,7 +91,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   crossAxisSpacing: 5,
                   mainAxisSpacing: 5,
                 ),
-                itemBuilder: (BuildContext context, int index) {
+                itemBuilder: (BuildContext context,  index) {
                   BlockChecker block = alist[index];
                   return Container(
                       color: Colors.white,
@@ -106,33 +105,109 @@ class _MyHomePageState extends State<MyHomePage> {
                           crossAxisSpacing: 2,
                           mainAxisSpacing: 2,
                         ),
-                        itemBuilder: (BuildContext context, int index) {
-                          BoxChecker box = block.blokChars[index];
+                        itemBuilder: (BuildContext context, indexChar) {
+                          BoxChecker box = block.blokChars[indexChar];
+                          Color color = Colors.yellow.shade100;
+                          Color colorText = Colors.black;
+
+                          if (isfinish)
+                            color = Colors.green;
+                          else if (box.isFocus && box.text != "")
+                            color = Colors.brown.shade100;
+                          else if (box.isDefault)
+                            color = Colors.grey.shade400;
+
+                          if (tapbox == "${index}-${indexChar}" &&
+                              !isfinish) color = Colors.blue.shade100;
+
+                          if (this.isfinish)
+                            colorText = Colors.white;
+                          else  colorText = Colors.red;
+
                           return Container(
                               margin: EdgeInsets.all(3),
                               color: Colors.grey.shade300,
                               alignment: Alignment.center,
-                              child: InkWell(
-                                onTap: () {
-                                  ScaffoldMessenger.of(context)
-                                      .showSnackBar(snack);
-                                },
-                                child: Container(
-                                  child: TextField(
-                                    textAlign: TextAlign.center,
-                                    controller: thecontroller,
-                                    //enabled: false,
-                                    decoration: InputDecoration(
-                                      labelText: thecontroller.text,
-                                    ),
-                                  ),
-                                ),
+                              child: TextButton(
+                                onPressed:box.isDefault
+                                  ? null
+                                  : () {
+                                setFocus(index, indexChar);
+                                }, child: Text('${box.text}'),
+
+                                // child: Container(
+                                //   child: TextField(
+                                //     textAlign: TextAlign.center,
+                                //     controller: thecontroller,
+                                //     //enabled: false,
+                                //     decoration: InputDecoration(
+                                //       labelText: thecontroller.text,
+                                //     ),
+                                //   ),
+                                // ),
                               ));
                         },
                       ));
                 },
               ),
             ),
+
+    Expanded(
+    child: Container(
+    padding: EdgeInsets.all(20),
+    alignment: Alignment.center,
+    child: Row(
+    // crossAxisAlignment: CrossAxisAlignment.stretch,
+    // mainAxisAlignment: MainAxisAlignment.spaceAround,
+    children: [
+    Container(
+    child: GridView.builder(
+    itemCount: 9,
+    shrinkWrap: true,
+    scrollDirection: Axis.horizontal,
+    gridDelegate:
+    SliverGridDelegateWithFixedCrossAxisCount(
+    crossAxisCount: 1,
+    childAspectRatio: 3,
+    crossAxisSpacing: 2,
+    mainAxisSpacing: 7,
+    ),
+    physics: ScrollPhysics(),
+    itemBuilder: (buildContext, index) {
+    return
+    SizedBox(
+      width: 10,
+      height: 10,
+      child: ElevatedButton(
+        onPressed: () => setInput(index + 1),
+        child: Text(
+          "${index + 1}",
+          style: TextStyle(color: Colors.white),
+        ),
+        // style: ButtonStyle(
+        //   backgroundColor:
+        //   MaterialStateProperty.all<Color>(
+        //       Colors.white),
+        // ),
+      ),
+    );
+
+
+    //   ElevatedButton(
+    // onPressed: () => setInput(index + 1),
+    // child: Text(
+    // "${index + 1}",
+    // style: TextStyle(color: Colors.black),
+    // ),
+    // style: ButtonStyle(
+    // backgroundColor:
+    // MaterialStateProperty.all<Color>(
+    // Colors.white),
+    // ),
+    // );
+    },
+    ),
+    ),],),),),
             // Expanded(
             //   child: Container(
             //     decoration: BoxDecoration(color: Colors.grey),
@@ -167,7 +242,7 @@ class _MyHomePageState extends State<MyHomePage> {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 ElevatedButton(
-                    onPressed: () => generateSudoku(), child: Text('Reset')),
+                    onPressed: () =>generateSudoku(), child: Text('Reset')),
                 ElevatedButton(
                   onPressed: null,
                   child: Text('Check Answer'),
@@ -184,7 +259,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   generatepuzzle() {
     alist.clear();
-    var sudokugenerator = SudokuGenerator(emptySquares: 3);
+    var sudokugenerator = SudokuGenerator(emptySquares: 4);
     List<List<List<int>>> completes = partition(sudokugenerator.newSudokuSolved,
             sqrt(sudokugenerator.newSudoku.length).toInt())
         .toList();
@@ -193,14 +268,119 @@ class _MyHomePageState extends State<MyHomePage> {
         .toList()
         .asMap()
         .entries
-        .forEach((entry) {
+        .forEach(
+            (entry) {
       List<int> templistcomplete =
           completes[entry.key].expand((element) => element).toList();
       List<int> templist = entry.value.expand((element) => element).toList();
       templist.asMap().entries.forEach((entryin) {
         int index = entry.key * sqrt(sudokugenerator.newSudoku.length).toInt() +
             (entryin.key % 9).toInt() ~/ 3;
+        if (alist.where((element) => element.index== index).length ==0){
+          alist.add(BlockChecker(index, []));
+        }
+
+        BlockChecker block=alist.where((element) => element.index== index).first;
+        block.blokChars.add(BoxChecker(
+          entryin.value== 0 ? "": entryin.value.toString(),
+          index: block.blokChars.length,
+          isDefault: entryin.value != 0,
+          isCorrect: entryin.value != 0,
+          correctText: templistcomplete[entryin.key].toString(),
+
+        ));
       });
     });
+    print(alist);
+  }
+
+  setFocus(int index, int indexChar) {
+    tapbox = "$index-$indexChar";
+    highLight.setData(index, indexChar);
+    showFocusCenterLine();
+    setState(() {});
+  }
+
+  void showFocusCenterLine() {
+    // set focus color for line vertical & horizontal
+    int rowNoBox = highLight.indexBox! ~/ 3;
+    int colNoBox = highLight.indexBox! % 3;
+
+    this.alist.forEach((element) => element.clearFocus());
+
+    alist.where((element) => element.index ~/ 3 == rowNoBox).forEach(
+            (e) => e.setFocus(highLight.indexChar!, Direction.Horizontal));
+
+    alist
+        .where((element) => element.index % 3 == colNoBox)
+        .forEach((e) => e.setFocus(highLight.indexChar!, Direction.Vertical));
+  }
+
+  setInput(int? number) {
+    // set input data based grid
+    // or clear out data
+    if (highLight.indexBox == null) return;
+    if (alist[highLight.indexBox!].blokChars[highLight.indexChar!].text ==
+        number.toString() ||
+        number == null) {
+      alist.forEach((element) {
+        element.clearFocus();
+        element.clearExist();
+      });
+      alist[highLight.indexBox!]
+          .blokChars[highLight.indexChar!]
+          .setEmpty();
+      tapbox = null;
+      isfinish = false;
+      showSameInputOnSameLine();
+    } else {
+      alist[highLight.indexBox!]
+          .blokChars[highLight.indexChar!]
+          .setText("$number");
+
+      showSameInputOnSameLine();
+
+      checkfinish();
+    }
+
+    setState(() {});
+  }
+
+  void showSameInputOnSameLine() {
+    // show duplicate number on same line vertical & horizontal so player know he or she put a wrong value on somewhere
+
+    int rowNoBox = highLight.indexBox! ~/ 3;
+    int colNoBox = highLight.indexBox! % 3;
+
+    String textInput =
+    alist[highLight.indexBox!].blokChars[highLight.indexChar!].text!;
+
+    alist.forEach((element) => element.clearExist());
+
+    alist.where((element) => element.index ~/ 3 == rowNoBox).forEach((e) =>
+        e.setExistValue(highLight.indexChar!, highLight.indexBox!, textInput,
+            Direction.Horizontal));
+
+    alist.where((element) => element.index % 3 == colNoBox).forEach((e) =>
+        e.setExistValue(highLight.indexChar!, highLight.indexBox!, textInput,
+            Direction.Vertical));
+
+    List<BoxChecker> exists = alist
+        .map((element) => element.blokChars)
+        .expand((element) => element)
+        .where((element) => element.isExist)
+        .toList();
+
+    if (exists.length == 1) exists[0].isExist = false;
+  }
+
+  void checkfinish() {
+    int totalUnfinish = alist
+        .map((e) => e.blokChars)
+        .expand((element) => element)
+        .where((element) => !element.isCorrect)
+        .length;
+
+    isfinish = totalUnfinish == 0;
   }
 }
