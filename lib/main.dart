@@ -66,14 +66,9 @@ class _MyHomePageState extends State<MyHomePage> {
   final snack = SnackBar(content: Text("Just to test inkwell"));
   @override
   Widget build(BuildContext context) {
-    final thecontroller = TextEditingController();
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
-        actions: [
-          ElevatedButton(
-              onPressed: () => generateSudoku(), child: Icon(Icons.refresh)),
-        ],
         title: Text(widget.title),
       ),
       body: SafeArea(
@@ -119,37 +114,17 @@ class _MyHomePageState extends State<MyHomePage> {
                             color = Colors.green;
                           else if (box.isFocus && box.text != "")
                             color = Colors.brown.shade100;
-                          else if (box.isDefault)
-                            color = Colors.grey.shade400;
+                          else if (box.isDefault) color = Colors.grey.shade400;
                           if (tapbox == "${index}-${indexChar}" && !isfinish)
                             color = Colors.blue.shade100;
 
-
-
                           if (this.isfinish) {
                             colorText = Colors.white;
+                          } else if (box.isExist) {
+                            colorText = Colors.red;
                           }
 
-
-
-
-                          else if(box.isExist) {
-
-                            colorText = Colors.red;
-                           }
-                          // if(isnottfinished){
-                          //   WidgetsBinding.instance.addPostFrameCallback((_) =>
-                          //       ScaffoldMessenger.of(context)
-                          //           .showSnackBar(snackred));
-                          // }
-
-                            ;
-
-                          //
-                          //
-                          // }
-
-
+                          ;
 
                           return Container(
                               margin: EdgeInsets.all(3),
@@ -165,31 +140,17 @@ class _MyHomePageState extends State<MyHomePage> {
                                   '${box.text}',
                                   style: TextStyle(color: colorText),
                                 ),
-
-                                // child: Container(
-                                //   child: TextField(
-                                //     textAlign: TextAlign.center,
-                                //     controller: thecontroller,
-                                //     //enabled: false,
-                                //     decoration: InputDecoration(
-                                //       labelText: thecontroller.text,
-                                //     ),
-                                //   ),
-                                // ),
                               ));
                         },
                       ));
                 },
               ),
             ),
-
             Expanded(
               child: Container(
                 padding: EdgeInsets.all(20),
                 alignment: Alignment.center,
                 child: Row(
-                  // crossAxisAlignment: CrossAxisAlignment.stretch,
-                  // mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     Container(
                       child: GridView.builder(
@@ -213,26 +174,8 @@ class _MyHomePageState extends State<MyHomePage> {
                                 "${index + 1}",
                                 style: TextStyle(color: Colors.white),
                               ),
-                              // style: ButtonStyle(
-                              //   backgroundColor:
-                              //   MaterialStateProperty.all<Color>(
-                              //       Colors.white),
-                              // ),
                             ),
                           );
-
-                          //   ElevatedButton(
-                          // onPressed: () => setInput(index + 1),
-                          // child: Text(
-                          // "${index + 1}",
-                          // style: TextStyle(color: Colors.black),
-                          // ),
-                          // style: ButtonStyle(
-                          // backgroundColor:
-                          // MaterialStateProperty.all<Color>(
-                          // Colors.white),
-                          // ),
-                          // );
                         },
                       ),
                     ),
@@ -240,23 +183,17 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
               ),
             ),
-
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 ElevatedButton(
                     onPressed: () => generateSudoku(), child: Text('Reset')),
                 ElevatedButton(
-                  onPressed:
-                   isnottfinished ? (){
-                     ScaffoldMessenger.of(context).showSnackBar(snackred);
-                   }: null,
-                    // isnottfinished
-                    //
-                    // ? ()=> ScaffoldMessenger.of(context)
-                    //     .showSnackBar(snackred)
-                    // :null ;
-
+                  onPressed: isnottfinished
+                      ? () {
+                          ScaffoldMessenger.of(context).showSnackBar(snackred);
+                        }
+                      : null,
                   child: Text('Check Answer'),
                 )
               ],
@@ -264,8 +201,6 @@ class _MyHomePageState extends State<MyHomePage> {
           ],
         ),
       )),
-
-      // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 
@@ -391,8 +326,11 @@ class _MyHomePageState extends State<MyHomePage> {
         .where((element) => !element.isCorrect)
         .length;
 
-    int totalUnfinish2 =
-        alist.map((e) => e.blokChars).expand((element) => element).where((element) => element.text=="").length;
+    int totalUnfinish2 = alist
+        .map((e) => e.blokChars)
+        .expand((element) => element)
+        .where((element) => element.text == "")
+        .length;
     print(totalUnfinish2);
 
     int totalUnfinish3 = alist
@@ -403,14 +341,9 @@ class _MyHomePageState extends State<MyHomePage> {
     print(totalUnfinish3);
 
     isfinish = totalUnfinish == 0;
-    isnottfinished =
-    ((totalUnfinish> 0 && totalUnfinish<= 4) && (totalUnfinish2==0)  && totalUnfinish3 != 81);
+    isnottfinished = ((totalUnfinish > 0 && totalUnfinish <= 4) &&
+        (totalUnfinish2 == 0) &&
+        totalUnfinish3 != 81);
     print("unfinished ${totalUnfinish}");
-    // if (isfinish) {
-    //   ScaffoldMessenger.of(context).showSnackBar(snack);
-    //   print("List length is ${alist.length}");
-    // } else {
-    //   ScaffoldMessenger.of(context).showSnackBar(snackred);
-    // }
   }
 }
