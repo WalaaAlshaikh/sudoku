@@ -113,7 +113,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           if (isfinish)
                             color = Colors.green;
                           else if (box.isFocus && box.text != "")
-                            color = Colors.brown.shade100;
+                            color = Colors.blue.shade100;
                           else if (box.isDefault) color = Colors.grey.shade400;
                           if (tapbox == "${index}-${indexChar}" && !isfinish)
                             color = Colors.blue.shade100;
