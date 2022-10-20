@@ -36,16 +36,17 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  var _scaffoldKey = GlobalKey<ScaffoldState>();
   List<BlockChecker> alist = [];
   HighLights highLight = HighLights();
   bool isfinish = false;
+  bool isnottfinished = false;
   String? tapbox;
 
   @override
   void initState() {
     generateSudoku();
     super.initState();
-
   }
 
   void generateSudoku() {
@@ -54,15 +55,20 @@ class _MyHomePageState extends State<MyHomePage> {
     tapbox = null;
     generatepuzzle();
     checkfinish();
-    setState((){});
+    setState(() {});
     print(alist);
   }
+
+  final snackred = SnackBar(
+      content: Text("Something is wrong. Try again"),
+      backgroundColor: Colors.red);
 
   final snack = SnackBar(content: Text("Just to test inkwell"));
   @override
   Widget build(BuildContext context) {
     final thecontroller = TextEditingController();
     return Scaffold(
+      key: _scaffoldKey,
       appBar: AppBar(
         actions: [
           ElevatedButton(
@@ -91,7 +97,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   crossAxisSpacing: 5,
                   mainAxisSpacing: 5,
                 ),
-                itemBuilder: (BuildContext context,  index) {
+                itemBuilder: (BuildContext context, index) {
                   BlockChecker block = alist[index];
                   return Container(
                       color: Colors.white,
@@ -107,33 +113,58 @@ class _MyHomePageState extends State<MyHomePage> {
                         ),
                         itemBuilder: (BuildContext context, indexChar) {
                           BoxChecker box = block.blokChars[indexChar];
-                          Color color = Colors.yellow.shade100;
-                          Color colorText = Colors.black;
-
+                          Color color = Colors.white;
+                          Color colorText = Colors.grey.shade700;
                           if (isfinish)
                             color = Colors.green;
                           else if (box.isFocus && box.text != "")
                             color = Colors.brown.shade100;
                           else if (box.isDefault)
                             color = Colors.grey.shade400;
+                          if (tapbox == "${index}-${indexChar}" && !isfinish)
+                            color = Colors.blue.shade100;
 
-                          if (tapbox == "${index}-${indexChar}" &&
-                              !isfinish) color = Colors.blue.shade100;
 
-                          if (this.isfinish)
+
+                          if (this.isfinish) {
                             colorText = Colors.white;
-                          else  colorText = Colors.red;
+                          }
+
+
+
+
+                          else if(box.isExist) {
+
+                            colorText = Colors.red;
+                           }
+                          // if(isnottfinished){
+                          //   WidgetsBinding.instance.addPostFrameCallback((_) =>
+                          //       ScaffoldMessenger.of(context)
+                          //           .showSnackBar(snackred));
+                          // }
+
+                            ;
+
+                          //
+                          //
+                          // }
+
+
 
                           return Container(
                               margin: EdgeInsets.all(3),
-                              color: Colors.grey.shade300,
+                              color: color,
                               alignment: Alignment.center,
                               child: TextButton(
-                                onPressed:box.isDefault
-                                  ? null
-                                  : () {
-                                setFocus(index, indexChar);
-                                }, child: Text('${box.text}'),
+                                onPressed: box.isDefault
+                                    ? null
+                                    : () {
+                                        setFocus(index, indexChar);
+                                      },
+                                child: Text(
+                                  '${box.text}',
+                                  style: TextStyle(color: colorText),
+                                ),
 
                                 // child: Container(
                                 //   child: TextField(
@@ -152,99 +183,80 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
             ),
 
-    Expanded(
-    child: Container(
-    padding: EdgeInsets.all(20),
-    alignment: Alignment.center,
-    child: Row(
-    // crossAxisAlignment: CrossAxisAlignment.stretch,
-    // mainAxisAlignment: MainAxisAlignment.spaceAround,
-    children: [
-    Container(
-    child: GridView.builder(
-    itemCount: 9,
-    shrinkWrap: true,
-    scrollDirection: Axis.horizontal,
-    gridDelegate:
-    SliverGridDelegateWithFixedCrossAxisCount(
-    crossAxisCount: 1,
-    childAspectRatio: 3,
-    crossAxisSpacing: 2,
-    mainAxisSpacing: 7,
-    ),
-    physics: ScrollPhysics(),
-    itemBuilder: (buildContext, index) {
-    return
-    SizedBox(
-      width: 10,
-      height: 10,
-      child: ElevatedButton(
-        onPressed: () => setInput(index + 1),
-        child: Text(
-          "${index + 1}",
-          style: TextStyle(color: Colors.white),
-        ),
-        // style: ButtonStyle(
-        //   backgroundColor:
-        //   MaterialStateProperty.all<Color>(
-        //       Colors.white),
-        // ),
-      ),
-    );
+            Expanded(
+              child: Container(
+                padding: EdgeInsets.all(20),
+                alignment: Alignment.center,
+                child: Row(
+                  // crossAxisAlignment: CrossAxisAlignment.stretch,
+                  // mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    Container(
+                      child: GridView.builder(
+                        itemCount: 9,
+                        shrinkWrap: true,
+                        scrollDirection: Axis.horizontal,
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 1,
+                          childAspectRatio: 3,
+                          crossAxisSpacing: 2,
+                          mainAxisSpacing: 7,
+                        ),
+                        physics: ScrollPhysics(),
+                        itemBuilder: (buildContext, index) {
+                          return SizedBox(
+                            width: 50,
+                            height: 10,
+                            child: ElevatedButton(
+                              onPressed: () => setInput(index + 1),
+                              child: Text(
+                                "${index + 1}",
+                                style: TextStyle(color: Colors.white),
+                              ),
+                              // style: ButtonStyle(
+                              //   backgroundColor:
+                              //   MaterialStateProperty.all<Color>(
+                              //       Colors.white),
+                              // ),
+                            ),
+                          );
 
+                          //   ElevatedButton(
+                          // onPressed: () => setInput(index + 1),
+                          // child: Text(
+                          // "${index + 1}",
+                          // style: TextStyle(color: Colors.black),
+                          // ),
+                          // style: ButtonStyle(
+                          // backgroundColor:
+                          // MaterialStateProperty.all<Color>(
+                          // Colors.white),
+                          // ),
+                          // );
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
 
-    //   ElevatedButton(
-    // onPressed: () => setInput(index + 1),
-    // child: Text(
-    // "${index + 1}",
-    // style: TextStyle(color: Colors.black),
-    // ),
-    // style: ButtonStyle(
-    // backgroundColor:
-    // MaterialStateProperty.all<Color>(
-    // Colors.white),
-    // ),
-    // );
-    },
-    ),
-    ),],),),),
-            // Expanded(
-            //   child: Container(
-            //     decoration: BoxDecoration(color: Colors.grey),
-            //     child: GridView.builder(
-            //       itemCount: 9,
-            //       shrinkWrap: true,
-            //       scrollDirection: Axis.vertical,
-            //       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            //         crossAxisCount: 3,
-            //         childAspectRatio: 1,
-            //         crossAxisSpacing: 5,
-            //         mainAxisSpacing: 5,
-            //       ),
-            //       physics: ScrollPhysics(),
-            //       itemBuilder: (buildContext, index) {
-            //         return ElevatedButton(
-            //           onPressed: () {},
-            //           child: Text(
-            //             "${index + 1}",
-            //             style: TextStyle(color: Colors.black),
-            //           ),
-            //           style: ButtonStyle(
-            //             backgroundColor:
-            //                 MaterialStateProperty.all<Color>(Colors.white),
-            //           ),
-            //         );
-            //       },
-            //     ),
-            //   ),
-            // ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 ElevatedButton(
-                    onPressed: () =>generateSudoku(), child: Text('Reset')),
+                    onPressed: () => generateSudoku(), child: Text('Reset')),
                 ElevatedButton(
-                  onPressed: null,
+                  onPressed:
+                   isnottfinished ? (){
+                     ScaffoldMessenger.of(context).showSnackBar(snackred);
+                   }: null,
+                    // isnottfinished
+                    //
+                    // ? ()=> ScaffoldMessenger.of(context)
+                    //     .showSnackBar(snackred)
+                    // :null ;
+
                   child: Text('Check Answer'),
                 )
               ],
@@ -268,26 +280,25 @@ class _MyHomePageState extends State<MyHomePage> {
         .toList()
         .asMap()
         .entries
-        .forEach(
-            (entry) {
+        .forEach((entry) {
       List<int> templistcomplete =
           completes[entry.key].expand((element) => element).toList();
       List<int> templist = entry.value.expand((element) => element).toList();
       templist.asMap().entries.forEach((entryin) {
         int index = entry.key * sqrt(sudokugenerator.newSudoku.length).toInt() +
             (entryin.key % 9).toInt() ~/ 3;
-        if (alist.where((element) => element.index== index).length ==0){
+        if (alist.where((element) => element.index == index).length == 0) {
           alist.add(BlockChecker(index, []));
         }
 
-        BlockChecker block=alist.where((element) => element.index== index).first;
+        BlockChecker block =
+            alist.where((element) => element.index == index).first;
         block.blokChars.add(BoxChecker(
-          entryin.value== 0 ? "": entryin.value.toString(),
+          entryin.value == 0 ? "" : entryin.value.toString(),
           index: block.blokChars.length,
           isDefault: entryin.value != 0,
           isCorrect: entryin.value != 0,
           correctText: templistcomplete[entryin.key].toString(),
-
         ));
       });
     });
@@ -308,8 +319,9 @@ class _MyHomePageState extends State<MyHomePage> {
 
     this.alist.forEach((element) => element.clearFocus());
 
-    alist.where((element) => element.index ~/ 3 == rowNoBox).forEach(
-            (e) => e.setFocus(highLight.indexChar!, Direction.Horizontal));
+    alist
+        .where((element) => element.index ~/ 3 == rowNoBox)
+        .forEach((e) => e.setFocus(highLight.indexChar!, Direction.Horizontal));
 
     alist
         .where((element) => element.index % 3 == colNoBox)
@@ -321,15 +333,13 @@ class _MyHomePageState extends State<MyHomePage> {
     // or clear out data
     if (highLight.indexBox == null) return;
     if (alist[highLight.indexBox!].blokChars[highLight.indexChar!].text ==
-        number.toString() ||
+            number.toString() ||
         number == null) {
       alist.forEach((element) {
         element.clearFocus();
         element.clearExist();
       });
-      alist[highLight.indexBox!]
-          .blokChars[highLight.indexChar!]
-          .setEmpty();
+      alist[highLight.indexBox!].blokChars[highLight.indexChar!].setEmpty();
       tapbox = null;
       isfinish = false;
       showSameInputOnSameLine();
@@ -353,7 +363,7 @@ class _MyHomePageState extends State<MyHomePage> {
     int colNoBox = highLight.indexBox! % 3;
 
     String textInput =
-    alist[highLight.indexBox!].blokChars[highLight.indexChar!].text!;
+        alist[highLight.indexBox!].blokChars[highLight.indexChar!].text!;
 
     alist.forEach((element) => element.clearExist());
 
@@ -381,6 +391,26 @@ class _MyHomePageState extends State<MyHomePage> {
         .where((element) => !element.isCorrect)
         .length;
 
+    int totalUnfinish2 =
+        alist.map((e) => e.blokChars).expand((element) => element).where((element) => element.text=="").length;
+    print(totalUnfinish2);
+
+    int totalUnfinish3 = alist
+        .map((e) => e.blokChars)
+        .expand((element) => element)
+        .where((element) => element.isCorrect)
+        .length;
+    print(totalUnfinish3);
+
     isfinish = totalUnfinish == 0;
+    isnottfinished =
+    ((totalUnfinish> 0 && totalUnfinish<= 4) && (totalUnfinish2==0)  && totalUnfinish3 != 81);
+    print("unfinished ${totalUnfinish}");
+    // if (isfinish) {
+    //   ScaffoldMessenger.of(context).showSnackBar(snack);
+    //   print("List length is ${alist.length}");
+    // } else {
+    //   ScaffoldMessenger.of(context).showSnackBar(snackred);
+    // }
   }
 }
